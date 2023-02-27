@@ -6,34 +6,33 @@ const customersService = new CustomersService();
 class CustomerCreateUpdate extends Component {
     constructor(props) {
         super(props);
-    
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
       componentDidMount(){
-        const { params} = this.props;
+        const {  params } = this.props;
         if(params && params.pk)
         {
           customersService.getCustomer(params.pk).then((c)=>{
-            this.refs.firstName.value = c.first_name;
-            this.refs.lastName.value = c.last_name;
-            this.refs.email.value = c.email;
-            this.refs.phone.value = c.phone;
-            this.refs.address.value = c.address;
-            this.refs.description.value = c.description;
+            this.firstName.current.value = c.first_name;
+            this.lastName.current.value = c.last_name;
+            this.email.current.value = c.email;
+            this.phone.current.value = c.phone;
+            this.address.current.value = c.address;
+            this.description.current.value = c.description;
           })
         }
       }
 
       handleCreate(){
         customersService.createCustomer(
-        {
-            "first_name": this.refs.firstName.value,
-            "last_name": this.refs.lastName.value,
-            "email": this.refs.email.value,
-            "phone": this.refs.phone.value,
-            "address": this.refs.address.value,
-            "description": this.refs.description.value
+          {
+            "first_name": this.firstName.current.value,
+            "last_name": this.lastName.current.value,
+            "email": this.email.current.value,
+            "phone": this.phone.current.value,
+            "address": this.address.current.value,
+            "description": this.description.current.value
         }          
         ).then((result)=>{
           alert("Customer created!");
@@ -45,12 +44,12 @@ class CustomerCreateUpdate extends Component {
         customersService.updateCustomer(
           {
             "pk": pk,
-            "first_name": this.refs.firstName.value,
-            "last_name": this.refs.lastName.value,
-            "email": this.refs.email.value,
-            "phone": this.refs.phone.value,
-            "address": this.refs.address.value,
-            "description": this.refs.description.value
+            "first_name": this.firstName.current.value,
+            "last_name": this.lastName.current.value,
+            "email": this.email.current.value,
+            "phone": this.phone.current.value,
+            "address": this.address.current.value,
+            "description": this.description.current.value
         }          
         ).then((result)=>{
           console.log(result);
@@ -60,8 +59,8 @@ class CustomerCreateUpdate extends Component {
         });
       }
       handleSubmit(event) {
-        const { match: { params } } = this.props;
-
+        const {  params } = this.props;
+        console.log(params);
         if(params && params.pk){
           this.handleUpdate(params.pk);
         }
@@ -75,38 +74,38 @@ class CustomerCreateUpdate extends Component {
     
       render() {
         return (
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <label>
-                First Name:</label>
-                <input className="form-control" type="text" ref='firstName' />
+          <form >
+          <div className="form-group">
+            <label>
+              First Name:</label>
+              <input className="form-control" type="text" ref='firstName' />
+            
+            <label>
+              Last Name:</label>
+              <input className="form-control" type="text" ref='lastName'/>
+            
+            <label>
+              Phone:</label>
+              <input className="form-control" type="text" ref='phone' />
+            
+            <label>
+              Email:</label>
+              <input className="form-control" type="text" ref='email' />
+            
+            <label>
+              Address:</label>
+              <input className="form-control" type="text" ref='address' />
+            
+            <label>
+              Description:</label>
+              <textarea className="form-control" ref='description' ></textarea>
               
-              <label>
-                Last Name:</label>
-                <input className="form-control" type="text" ref='lastName'/>
-              
-              <label>
-                Phone:</label>
-                <input className="form-control" type="text" ref='phone' />
-              
-              <label>
-                Email:</label>
-                <input className="form-control" type="text" ref='email' />
-              
-              <label>
-                Address:</label>
-                <input className="form-control" type="text" ref='address' />
-              
-              <label>
-                Description:</label>
-                <textarea className="form-control" ref='description' ></textarea>
-                
 
-              <input className="btn btn-primary" type="submit" value="Submit" />
+            <input className="btn btn-primary" type="submit" value="Submit" onClick={this.handleSubmit}/>
             </div>
           </form>
         );
       }  
 }
 
-export default CustomerCreateUpdate;
+export default CustomerCreateUpdate;  
