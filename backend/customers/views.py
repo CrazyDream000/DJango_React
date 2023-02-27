@@ -11,8 +11,8 @@ from .serializers import *
 
 @api_view(['GET', 'POST'])
 def customers_list(request):
+    data = []
     if request.method == 'GET':
-        data = []
         nextPage = 1
         previousPage = 1
         customers = Customer.objects.all()
@@ -34,10 +34,19 @@ def customers_list(request):
         return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages, 'nextlink': '/api/customers/?page=' + str(nextPage), 'prevlink': '/api/customers/?page=' + str(previousPage)})
 
     elif request.method == 'POST':
-        serializer = CustomerSerializer(data=request.data)
+        print("-----")
+        print(request.data)
+        serializer = CustomerSerializer(data =  request.data)
+        print("--------")
+        print(serializer)
+        print("--------")
         if serializer.is_valid():
+
+            print("saving sucess!")
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            print("saved sucess!")
+            return Response(serializer)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET', 'PUT', 'DELETE'])
