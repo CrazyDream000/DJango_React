@@ -6,7 +6,6 @@ const customersService = new CustomersService();
 function CustomerCreateUpdate(props)
 {
   const initialState = {
-    pk:"",
     firstName: "",
     lastName: "",
     email: "",
@@ -26,6 +25,8 @@ function CustomerCreateUpdate(props)
   {
     customersService.createCustomer(crud)
     .then((result)=>{
+      console.log("---------result-------")
+      console.log(result);
       alert("Customer created!");
     }).catch(()=>{
       alert('There was an error! Please re-check your form.');

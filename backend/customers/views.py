@@ -1,8 +1,11 @@
 from django.shortcuts import render
 
 # Create your views here.
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -11,7 +14,6 @@ from .serializers import *
 
 @api_view(['GET', 'POST'])
 def customers_list(request):
-    data = []
     if request.method == 'GET':
         nextPage = 1
         previousPage = 1
@@ -34,20 +36,15 @@ def customers_list(request):
         return Response({'data': serializer.data , 'count': paginator.count, 'numpages' : paginator.num_pages, 'nextlink': '/api/customers/?page=' + str(nextPage), 'prevlink': '/api/customers/?page=' + str(previousPage)})
 
     elif request.method == 'POST':
-        print("-----")
+        #serializer = self.get_serializer(data=data)
+        print("------req data--------")
         print(request.data)
         serializer = CustomerSerializer(data =  request.data)
-        print("--------")
-        print(serializer)
-        print("--------")
         if serializer.is_valid():
-
-            print("saving sucess!")
             serializer.save()
-
-            print("saved sucess!")
-            return Response(serializer)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data , status=status.HTTP_200_OK)
+        
+        return Response(serializer.data , status=status.HTTP_201_CREATED)
     
 @api_view(['GET', 'PUT', 'DELETE'])
 def customers_detail(request, pk):
